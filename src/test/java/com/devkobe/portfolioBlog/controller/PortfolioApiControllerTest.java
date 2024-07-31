@@ -1,17 +1,25 @@
 package com.devkobe.portfolioBlog.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import com.devkobe.portfolioBlog.domain.Content;
+import com.devkobe.portfolioBlog.dto.create.AddContentRequestDto;
 import com.devkobe.portfolioBlog.repository.PortfolioBlogRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -34,5 +42,35 @@ class PortfolioApiControllerTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
             .build();
         portfolioBlogRepository.deleteAll();
+    }
+
+    @DisplayName("addContent: 포트폴리오 블로그 콘텐츠 추가에 성공한다.")
+    @Test
+    public void addContent() throws Exception {
+        // given
+        final String url = "/api/contents";
+        final String representativeImage = "https://www.example.com/image-1.png";
+        final String category = "BACKEND";
+        final String title = "포트폴리오 블로그";
+        final String connectUrl = "https://github.com/devKobe24/PortfolioBlog";
+        final AddContentRequestDto userRequest = new AddContentRequestDto(representativeImage, category, title, connectUrl);
+
+        // 객체 JSON으로 직렬화
+        final String requestBody = objectMapper.writeValueAsString(userRequest);
+
+        // when
+        // 설정한 내용을 바탕으로 요청 전송
+        ResultActions result = mockMvc.perform(post(url)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(requestBody));
+
+        // then
+        result.andExpect(status().isCreated());
+
+        List<Content> contents = portfolioBlogRepository.findAll();
+
+        assertThat(contents.size()).isEqualTo(1);
+        assertThat(contents.get(0).getTitle()).isEqualTo(title);
+        assertThat(contents.get(0).getConnectUrl()).isEqualTo(connectUrl);
     }
 }
