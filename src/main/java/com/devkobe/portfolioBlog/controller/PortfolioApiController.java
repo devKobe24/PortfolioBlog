@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,5 +37,14 @@ public class PortfolioApiController {
 
         return ResponseEntity.ok()
             .body(contents);
+    }
+
+    @GetMapping("/api/article/{id}")
+    // URL 경로에서 값 추출
+    public ResponseEntity<ContentResponseDto> findContent(@PathVariable Long id) {
+        Content content = portfolioBlogService.findById(id);
+
+        return ResponseEntity.ok()
+            .body(new ContentResponseDto(content));
     }
 }
