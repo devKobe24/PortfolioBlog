@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,8 +20,8 @@ public class Content {
     @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column(name = "representativeImage", nullable = false)
-    private String representativeImage;
+    @Column(name = "representativeImageUrl", nullable = false)
+    private String representativeImageUrl;
 
     @Column(name = "category", nullable = false)
     private String category;
@@ -34,11 +33,10 @@ public class Content {
     private String connectUrl;
 
     @Builder
-    public Content(String representativeImage, String category, String title, String connectUrl) {
-        this.representativeImage = representativeImage;
+    public Content(String representativeImageUrl, String category, String title, String connectUrl) {
+        this.representativeImageUrl = representativeImageUrl;
         this.category = category;
         this.title = title;
         this.connectUrl = connectUrl;
     }
-
 }
