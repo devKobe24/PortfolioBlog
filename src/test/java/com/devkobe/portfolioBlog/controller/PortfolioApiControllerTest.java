@@ -43,7 +43,7 @@ class PortfolioApiControllerTest {
     @BeforeEach // 테스트 실행 전 실행하는 메서드
     public void mockMvcSetUp() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
-            .build();
+                                      .build();
         portfolioBlogRepository.deleteAll();
     }
 
@@ -56,7 +56,8 @@ class PortfolioApiControllerTest {
         final String category = "BACKEND";
         final String title = "포트폴리오 블로그";
         final String connectUrl = "https://github.com/devKobe24/PortfolioBlog";
-        final AddContentRequestDto userRequest = new AddContentRequestDto(representativeImageUrl, category, title, connectUrl);
+        final AddContentRequestDto userRequest = new AddContentRequestDto(representativeImageUrl,
+            category, title, connectUrl);
 
         // 객체 JSON으로 직렬화
         final String requestBody = objectMapper.writeValueAsString(userRequest);
@@ -88,11 +89,11 @@ class PortfolioApiControllerTest {
         final String connectUrl = "https://www.github.com/devKobe24/PortfolioBlog";
 
         portfolioBlogRepository.save(Content.builder()
-            .representativeImageUrl(representativeImageUrl)
-            .category(category.toString())
-            .title(title)
-            .connectUrl(connectUrl)
-            .build());
+                                            .representativeImageUrl(representativeImageUrl)
+                                            .category(category.toString())
+                                            .title(title)
+                                            .connectUrl(connectUrl)
+                                            .build());
 
         // when
         final ResultActions resultActions = mockMvc.perform(get(url)
@@ -105,5 +106,34 @@ class PortfolioApiControllerTest {
             .andExpect(jsonPath("$[0].category").value(category.toString()))
             .andExpect(jsonPath("$[0].title").value(title))
             .andExpect(jsonPath("$[0].connectUrl").value(connectUrl));
+    }
+
+    @DisplayName("findContent: 콘텐츠 조회에 성공한다.")
+    @Test
+    public void findContent() throws Exception {
+        // given
+        final String url = "/api/contents/{id}";
+        final String representativeImageUrl = "https://www.example.com/contentImage-1.png";
+        final CategoryType category = CategoryType.BACKEND;
+        final String title = "포트폴리오 블로그";
+        final String connectUrl = "https://www.github.com/devKobe24/PortfolioBlog";
+
+        Content savedContent = portfolioBlogRepository.save(Content.builder()
+                                                                   .representativeImageUrl(representativeImageUrl)
+                                                                   .category(category.toString())
+                                                                   .title(title)
+                                                                   .connectUrl(connectUrl)
+                                                                   .build());
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(get(url, savedContent.getId()));
+
+        // then
+        resultActions
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.representativeImageUrl").value(representativeImageUrl))
+            .andExpect(jsonPath("$.category").value(category.toString()))
+            .andExpect(jsonPath("$.title").value(title))
+            .andExpect(jsonPath("$.connectUrl").value(connectUrl));
     }
 }
