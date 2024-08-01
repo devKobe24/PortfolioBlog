@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -135,5 +136,32 @@ class PortfolioApiControllerTest {
             .andExpect(jsonPath("$.category").value(category.toString()))
             .andExpect(jsonPath("$.title").value(title))
             .andExpect(jsonPath("$.connectUrl").value(connectUrl));
+    }
+
+    @DisplayName("deleteArticle: 블로그 글 삭제에 성공한다.")
+    @Test
+    public void deleteContent() throws Exception {
+        // given
+        final String url = "/api/contents/{id}";
+        final String representativeImageUrl = "https://www.example.com/contentImage-1.png";
+        final CategoryType category = CategoryType.BACKEND;
+        final String title = "포트폴리오 블로그";
+        final String connectUrl = "https://www.github.com/devKobe24/PortfolioBlog";
+
+        Content savedArticle = portfolioBlogRepository.save(Content.builder()
+            .representativeImageUrl(representativeImageUrl)
+            .category(category.toString())
+            .title(title)
+            .connectUrl(connectUrl)
+            .build());
+
+        // when
+        mockMvc.perform(delete(url, savedArticle.getId()))
+            .andExpect(status().isOk());
+
+        // then
+        List<Content> contents = portfolioBlogRepository.findAll();
+
+        assertThat(contents).isEmpty();
     }
 }
