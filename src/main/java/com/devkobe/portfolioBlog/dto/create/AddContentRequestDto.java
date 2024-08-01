@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 @Getter
 public class AddContentRequestDto {
 
-    private String representativeImage;
+    private String representativeImageUrl;
     private String category;
     private String title;
     private String connectUrl;
 
     public Content toEntity() {
         return Content.builder()
-            .representativeImage(representativeImage)
+            .representativeImageUrl(representativeImageUrl)
             .category(category)
             .title(title)
             .connectUrl(connectUrl)
