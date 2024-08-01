@@ -25,26 +25,25 @@ public class PortfolioApiController {
         Content savedContent = portfolioBlogService.save(requestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-            .body(savedContent);
+                             .body(savedContent);
     }
 
     @GetMapping("/api/contents")
     public ResponseEntity<List<ContentResponseDto>> findAllContents() {
         List<ContentResponseDto> contents = portfolioBlogService.findAll()
-            .stream()
-            .map(ContentResponseDto::new)
-            .toList();
+                                                                .stream()
+                                                                .map(ContentResponseDto::new)
+                                                                .toList();
 
         return ResponseEntity.ok()
-            .body(contents);
+                             .body(contents);
     }
 
     @GetMapping("/api/contents/{id}")
-    // URL 경로에서 값 추출
-    public ResponseEntity<ContentResponseDto> findContent(@PathVariable Long id) {
+    public ResponseEntity<ContentResponseDto> findArticle(@PathVariable("id") Long id) {
         Content content = portfolioBlogService.findById(id);
 
         return ResponseEntity.ok()
-            .body(new ContentResponseDto(content));
+                             .body(new ContentResponseDto(content));
     }
 }
