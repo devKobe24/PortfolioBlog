@@ -18,8 +18,14 @@ public class PortfolioBlogService {
         return portfolioBlogRepository.save(requestDto.toEntity());
     }
 
-    // DB에 저장되어 있는 글을 모두 가져오는 메서드
+    // DB에 저장되어 있는 컨텐츠을 모두 가져오는 메서드
     public List<Content> findAll() {
         return portfolioBlogRepository.findAll();
+    }
+
+    // 컨텐츠 하나를 가져오는 메서드
+    public Content fincById(Long id) {
+        return portfolioBlogRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Not found =======>>>>>> " + id));
     }
 }
