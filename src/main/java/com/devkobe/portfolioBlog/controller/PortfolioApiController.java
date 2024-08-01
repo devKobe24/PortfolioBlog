@@ -39,7 +39,7 @@ public class PortfolioApiController {
             .body(contents);
     }
 
-    @GetMapping("/api/article/{id}")
+    @GetMapping("/api/contents/{id}")
     // URL 경로에서 값 추출
     public ResponseEntity<ContentResponseDto> findContent(@PathVariable Long id) {
         Content content = portfolioBlogService.findById(id);
