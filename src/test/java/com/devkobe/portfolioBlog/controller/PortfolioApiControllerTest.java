@@ -2,7 +2,6 @@ package com.devkobe.portfolioBlog.controller;
 
 import com.devkobe.portfolioBlog.domain.Content;
 import com.devkobe.portfolioBlog.dto.create.AddContentRequestDto;
-import com.devkobe.portfolioBlog.dto.create.ContentResponseDto.CategoryType;
 import com.devkobe.portfolioBlog.repository.PortfolioBlogRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -85,13 +84,13 @@ class PortfolioApiControllerTest {
         // given
         final String url = "/api/contents";
         final String representativeImageUrl = "https://www.example.com/contentImage-1.png";
-        final CategoryType category = CategoryType.BACKEND;
+        final String category = "BACKEND";
         final String title = "포트폴리오 블로그";
         final String connectUrl = "https://www.github.com/devKobe24/PortfolioBlog";
 
         portfolioBlogRepository.save(Content.builder()
                                             .representativeImageUrl(representativeImageUrl)
-                                            .category(category.toString())
+                                            .category(category)
                                             .title(title)
                                             .connectUrl(connectUrl)
                                             .build());
@@ -104,7 +103,7 @@ class PortfolioApiControllerTest {
         resultActions
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].representativeImageUrl").value(representativeImageUrl))
-            .andExpect(jsonPath("$[0].category").value(category.toString()))
+            .andExpect(jsonPath("$[0].category").value(category))
             .andExpect(jsonPath("$[0].title").value(title))
             .andExpect(jsonPath("$[0].connectUrl").value(connectUrl));
     }
@@ -115,13 +114,13 @@ class PortfolioApiControllerTest {
         // given
         final String url = "/api/contents/{id}";
         final String representativeImageUrl = "https://www.example.com/contentImage-1.png";
-        final CategoryType category = CategoryType.BACKEND;
+        final String category = "BACKEND";
         final String title = "포트폴리오 블로그";
         final String connectUrl = "https://www.github.com/devKobe24/PortfolioBlog";
 
         Content savedContent = portfolioBlogRepository.save(Content.builder()
                                                                    .representativeImageUrl(representativeImageUrl)
-                                                                   .category(category.toString())
+                                                                   .category(category)
                                                                    .title(title)
                                                                    .connectUrl(connectUrl)
                                                                    .build());
@@ -133,7 +132,7 @@ class PortfolioApiControllerTest {
         resultActions
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.representativeImageUrl").value(representativeImageUrl))
-            .andExpect(jsonPath("$.category").value(category.toString()))
+            .andExpect(jsonPath("$.category").value(category))
             .andExpect(jsonPath("$.title").value(title))
             .andExpect(jsonPath("$.connectUrl").value(connectUrl));
     }
@@ -144,13 +143,13 @@ class PortfolioApiControllerTest {
         // given
         final String url = "/api/contents/{id}";
         final String representativeImageUrl = "https://www.example.com/contentImage-1.png";
-        final CategoryType category = CategoryType.BACKEND;
+        final String category = "BACKEND";
         final String title = "포트폴리오 블로그";
         final String connectUrl = "https://www.github.com/devKobe24/PortfolioBlog";
 
         Content savedArticle = portfolioBlogRepository.save(Content.builder()
             .representativeImageUrl(representativeImageUrl)
-            .category(category.toString())
+            .category(category)
             .title(title)
             .connectUrl(connectUrl)
             .build());

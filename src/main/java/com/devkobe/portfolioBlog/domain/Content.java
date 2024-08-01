@@ -39,4 +39,12 @@ public class Content {
         this.title = title;
         this.connectUrl = connectUrl;
     }
+
+    // 컨텐츠 수정 메서드
+    public void update(String representativeImageUrl, String category, String title, String connectUrl) {
+        this.representativeImageUrl = representativeImageUrl;
+        this.category = category;
+        this.title = title;
+        this.connectUrl = connectUrl;
+    }
 }
