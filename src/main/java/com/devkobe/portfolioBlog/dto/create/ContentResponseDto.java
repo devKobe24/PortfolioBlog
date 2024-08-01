@@ -7,14 +7,23 @@ import lombok.Getter;
 public class ContentResponseDto {
 
     private final String representativeImageUrl;
-    private final String category;
+    private final CategoryType category;
     private final String title;
     private final String connectUrl;
 
     public ContentResponseDto(Content content) {
         this.representativeImageUrl = content.getRepresentativeImageUrl();
-        this.category = content.getCategory();
+        this.category = CategoryType.valueOf(content.getCategory());
         this.title = content.getTitle();
         this.connectUrl = content.getConnectUrl();
     }
+
+    public enum CategoryType {
+        IOS,
+        ANDROID,
+        FRONTEND,
+        BACKEND;
+    }
 }
+
+
