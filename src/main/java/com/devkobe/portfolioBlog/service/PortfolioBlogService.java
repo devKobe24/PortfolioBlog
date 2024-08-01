@@ -28,4 +28,14 @@ public class PortfolioBlogService {
         return portfolioBlogRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Not found =======>>>>>> " + id));
     }
+
+    // 컨텐츠 삭제 메서드
+    public String delete(Long id) {
+        try {
+            portfolioBlogRepository.deleteById(id);
+            return "SUCCESS TO DELETE =======>>>>>>> " + id;
+        } catch (Exception e) {
+            return "FAIL TO DELETE =======>>>>>>> " + e.getLocalizedMessage();
+        }
+    }
 }
