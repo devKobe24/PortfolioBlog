@@ -2,6 +2,7 @@ package com.devkobe.portfolioBlog.controller;
 
 import com.devkobe.portfolioBlog.domain.Content;
 import com.devkobe.portfolioBlog.dto.create.AddContentRequestDto;
+import com.devkobe.portfolioBlog.dto.create.ContentResponseDto.CategoryType;
 import com.devkobe.portfolioBlog.repository.PortfolioBlogRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -19,7 +20,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -72,5 +75,35 @@ class PortfolioApiControllerTest {
         assertThat(contents.size()).isEqualTo(1);
         assertThat(contents.get(0).getTitle()).isEqualTo(title);
         assertThat(contents.get(0).getConnectUrl()).isEqualTo(connectUrl);
+    }
+
+    @DisplayName("findAllContents: 포트폴리오의 모든 컨텐츠 조회에 성공한다.")
+    @Test
+    public void findAllContents() throws Exception {
+        // given
+        final String url = "/api/contents";
+        final String representativeImageUrl = "https://www.example.com/contentImage-1.png";
+        final CategoryType category = CategoryType.BACKEND;
+        final String title = "포트폴리오 블로그";
+        final String connectUrl = "https://www.github.com/devKobe24/PortfolioBlog";
+
+        portfolioBlogRepository.save(Content.builder()
+            .representativeImageUrl(representativeImageUrl)
+            .category(category.toString())
+            .title(title)
+            .connectUrl(connectUrl)
+            .build());
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(get(url)
+            .accept(MediaType.APPLICATION_JSON));
+
+        // then
+        resultActions
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].representativeImageUrl").value(representativeImageUrl))
+            .andExpect(jsonPath("$[0].category").value(category.toString()))
+            .andExpect(jsonPath("$[0].title").value(title))
+            .andExpect(jsonPath("$[0].connectUrl").value(connectUrl));
     }
 }
