@@ -2,7 +2,6 @@ package com.devkobe.portfolioBlog.controller;
 
 import com.devkobe.portfolioBlog.domain.Content;
 import com.devkobe.portfolioBlog.dto.create.AddContentRequestDto;
-import com.devkobe.portfolioBlog.repository.PortfolioBlogRepository;
 import com.devkobe.portfolioBlog.service.PortfolioBlogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
