@@ -2,10 +2,12 @@ package com.devkobe.portfolioBlog.service;
 
 import com.devkobe.portfolioBlog.domain.Content;
 import com.devkobe.portfolioBlog.dto.create.AddContentRequestDto;
+import com.devkobe.portfolioBlog.dto.update.UpdateContentRequestDto;
 import com.devkobe.portfolioBlog.repository.PortfolioBlogRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -37,5 +39,16 @@ public class PortfolioBlogService {
         } catch (Exception e) {
             return "FAIL TO DELETE =======>>>>>>> " + e.getLocalizedMessage();
         }
+    }
+
+    // 컨텐츠 수정 메서드
+    @Transactional // 트렌젝션 메서드
+    public Content update(Long id, UpdateContentRequestDto requestDto) {
+        Content content = portfolioBlogRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Not found =======>>>>>>> " + id));
+
+        content.update(requestDto.getRepresentativeImageUrl(), requestDto.getCategory(), requestDto.getTitle(), requestDto.getConnectUrl());
+
+        return content;
     }
 }
