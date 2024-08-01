@@ -24,7 +24,7 @@ public class PortfolioBlogService {
     }
 
     // 컨텐츠 하나를 가져오는 메서드
-    public Content fincById(Long id) {
+    public Content findById(Long id) {
         return portfolioBlogRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Not found =======>>>>>> " + id));
     }
