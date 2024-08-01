@@ -49,11 +49,11 @@ class PortfolioApiControllerTest {
     public void addContent() throws Exception {
         // given
         final String url = "/api/contents";
-        final String representativeImage = "https://www.example.com/image-1.png";
+        final String representativeImageUrl = "https://www.example.com/image-1.png";
         final String category = "BACKEND";
         final String title = "포트폴리오 블로그";
         final String connectUrl = "https://github.com/devKobe24/PortfolioBlog";
-        final AddContentRequestDto userRequest = new AddContentRequestDto(representativeImage, category, title, connectUrl);
+        final AddContentRequestDto userRequest = new AddContentRequestDto(representativeImageUrl, category, title, connectUrl);
 
         // 객체 JSON으로 직렬화
         final String requestBody = objectMapper.writeValueAsString(userRequest);
