@@ -2,6 +2,7 @@ package com.devkobe.portfolioBlog.controller;
 
 import com.devkobe.portfolioBlog.domain.Content;
 import com.devkobe.portfolioBlog.dto.create.AddContentRequestDto;
+import com.devkobe.portfolioBlog.dto.update.UpdateContentRequestDto;
 import com.devkobe.portfolioBlog.repository.PortfolioBlogRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -20,6 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -162,5 +164,45 @@ class PortfolioApiControllerTest {
         List<Content> contents = portfolioBlogRepository.findAll();
 
         assertThat(contents).isEmpty();
+    }
+
+    @DisplayName("updateContent: 콘텐츠 수정에 성공한다.")
+    @Test
+    public void updateContent() throws Exception {
+        // given
+        final String url = "/api/contents/{id}";
+        final String representativeImageUrl = "https://www.example.com/contentImage-1.png";
+        final String category = "BACKEND";
+        final String title = "포트폴리오 블로그";
+        final String connectUrl = "https://www.github.com/devKobe24/PortfolioBlog";
+
+        Content savedContent = portfolioBlogRepository.save(Content.builder()
+            .representativeImageUrl(representativeImageUrl)
+            .category(category)
+            .title(title)
+            .connectUrl(connectUrl)
+            .build());
+
+        final String newRepresentativeImageUrl = "https://www.example.com/new-content-image-1.png";
+        final String newCategory = "iOS";
+        final String newTitle = "모바일 포트폴리오 블로그";
+        final String newConnectUrl = "https://www.github.com/devKobe24/iOSBlog";
+
+        UpdateContentRequestDto requestDto = new UpdateContentRequestDto(newRepresentativeImageUrl, newCategory, newTitle, newConnectUrl);
+
+        // when
+        ResultActions result = mockMvc.perform(put(url, savedContent.getId())
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(objectMapper.writeValueAsString(requestDto)));
+
+        // then
+        result.andExpect(status().isOk());
+
+        Content content = portfolioBlogRepository.findById(savedContent.getId()).get();
+
+        assertThat(content.getRepresentativeImageUrl()).isEqualTo(newRepresentativeImageUrl);
+        assertThat(content.getCategory()).isEqualTo(newCategory);
+        assertThat(content.getTitle()).isEqualTo(newTitle);
+        assertThat(content.getConnectUrl()).isEqualTo(newConnectUrl);
     }
 }
