@@ -3,6 +3,7 @@ package com.devkobe.portfolioBlog.controller;
 import com.devkobe.portfolioBlog.domain.Content;
 import com.devkobe.portfolioBlog.dto.create.AddContentRequestDto;
 import com.devkobe.portfolioBlog.dto.create.ContentResponseDto;
+import com.devkobe.portfolioBlog.dto.update.UpdateContentRequestDto;
 import com.devkobe.portfolioBlog.service.PortfolioBlogService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -54,5 +56,14 @@ public class PortfolioApiController {
 
         return ResponseEntity.ok()
             .body(deleteResult);
+    }
+
+    @PutMapping("/api/contents/{id}")
+    public ResponseEntity<Content> updateContent(@PathVariable("id") Long id, @RequestBody
+        UpdateContentRequestDto requestDto) {
+        Content updateContent = portfolioBlogService.update(id, requestDto);
+
+        return ResponseEntity.ok()
+            .body(updateContent);
     }
 }
